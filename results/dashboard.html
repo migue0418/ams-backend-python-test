@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Comparativa: con/sin rate limiter</title>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"
+  integrity="sha384-XcdcwHqIPULERb2yDEM4R0XaQKU3YnDsrTmjACBZyfdVVqjh6xQ4/DCMd7XLcA6Y"
+  crossorigin="anonymous"
+></script>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; color: #1a1a1a; }
+  h1 { font-size: 1.4rem; }
+  p.lead { color: #444; max-width: 70ch; }
+  .cards { display: flex; gap: 1rem; margin: 1.5rem 0; flex-wrap: wrap; }
+  .card { flex: 1; min-width: 220px; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; }
+  .card h2 { margin: 0 0 0.5rem; font-size: 1rem; }
+  .card table { width: 100%; font-size: 0.9rem; border-collapse: collapse; }
+  .card td { padding: 2px 0; }
+  .card td:last-child { text-align: right; font-weight: 600; }
+  .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  .chart-box { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; }
+  .full { grid-column: 1 / -1; }
+  footer { margin-top: 2rem; font-size: 0.85rem; color: #666; border-top: 1px solid #ddd; padding-top: 1rem; }
+  footer a { color: #06c; }
+  #error { color: #b00; white-space: pre-wrap; }
+</style>
+<!-- EMBEDDED_DATA_START -->
+<script>window.__EMBEDDED_RESULTS__ = {"no-rate-limit": {"label": "Sin rate limiter", "total_notifications": 2748, "drain_seconds": 267, "final": {"sent": 1463, "failed": 1285, "rate_limited_429": 8550, "injected_500": 143}, "samples": [{"t": 4, "total": 2748, "sent": 320, "failed": 241, "rate_limited_429": 1833, "injected_500": 34}, {"t": 28, "total": 2748, "sent": 451, "failed": 348, "rate_limited_429": 2469, "injected_500": 49}, {"t": 52, "total": 2748, "sent": 543, "failed": 438, "rate_limited_429": 3125, "injected_500": 57}, {"t": 76, "total": 2748, "sent": 662, "failed": 540, "rate_limited_429": 3789, "injected_500": 66}, {"t": 100, "total": 2748, "sent": 771, "failed": 645, "rate_limited_429": 4445, "injected_500": 79}, {"t": 124, "total": 2748, "sent": 865, "failed": 734, "rate_limited_429": 5100, "injected_500": 87}, {"t": 148, "total": 2748, "sent": 1000, "failed": 849, "rate_limited_429": 5746, "injected_500": 100}, {"t": 172, "total": 2748, "sent": 1092, "failed": 939, "rate_limited_429": 6386, "injected_500": 108}, {"t": 196, "total": 2748, "sent": 1190, "failed": 1034, "rate_limited_429": 7040, "injected_500": 117}, {"t": 219, "total": 2748, "sent": 1323, "failed": 1136, "rate_limited_429": 7679, "injected_500": 126}, {"t": 243, "total": 2748, "sent": 1412, "failed": 1227, "rate_limited_429": 8322, "injected_500": 138}, {"t": 267, "total": 2748, "sent": 1463, "failed": 1285, "rate_limited_429": 8550, "injected_500": 143}]}, "with-rate-limit": {"label": "Con rate limiter (45 req/10s)", "total_notifications": 2748, "drain_seconds": 667, "final": {"sent": 2748, "failed": 0, "rate_limited_429": 0, "injected_500": 300}, "samples": [{"t": 4, "total": 2748, "sent": 238, "failed": 0, "rate_limited_429": 0, "injected_500": 32}, {"t": 27, "total": 2748, "sent": 321, "failed": 0, "rate_limited_429": 0, "injected_500": 39}, {"t": 51, "total": 2748, "sent": 402, "failed": 0, "rate_limited_429": 0, "injected_500": 52}, {"t": 74, "total": 2748, "sent": 496, "failed": 0, "rate_limited_429": 0, "injected_500": 75}, {"t": 98, "total": 2748, "sent": 583, "failed": 0, "rate_limited_429": 0, "injected_500": 92}, {"t": 122, "total": 2748, "sent": 666, "failed": 0, "rate_limited_429": 0, "injected_500": 99}, {"t": 146, "total": 2748, "sent": 752, "failed": 0, "rate_limited_429": 0, "injected_500": 119}, {"t": 169, "total": 2748, "sent": 862, "failed": 0, "rate_limited_429": 0, "injected_500": 128}, {"t": 193, "total": 2748, "sent": 943, "failed": 0, "rate_limited_429": 0, "injected_500": 137}, {"t": 217, "total": 2748, "sent": 1029, "failed": 0, "rate_limited_429": 0, "injected_500": 147}, {"t": 240, "total": 2748, "sent": 1143, "failed": 0, "rate_limited_429": 0, "injected_500": 158}, {"t": 264, "total": 2748, "sent": 1228, "failed": 0, "rate_limited_429": 0, "injected_500": 167}, {"t": 288, "total": 2748, "sent": 1310, "failed": 0, "rate_limited_429": 0, "injected_500": 175}, {"t": 311, "total": 2748, "sent": 1415, "failed": 0, "rate_limited_429": 0, "injected_500": 181}, {"t": 335, "total": 2748, "sent": 1521, "failed": 0, "rate_limited_429": 0, "injected_500": 189}, {"t": 359, "total": 2748, "sent": 1607, "failed": 0, "rate_limited_429": 0, "injected_500": 193}, {"t": 382, "total": 2748, "sent": 1699, "failed": 0, "rate_limited_429": 0, "injected_500": 198}, {"t": 406, "total": 2748, "sent": 1821, "failed": 0, "rate_limited_429": 0, "injected_500": 204}, {"t": 430, "total": 2748, "sent": 1897, "failed": 0, "rate_limited_429": 0, "injected_500": 218}, {"t": 453, "total": 2748, "sent": 1981, "failed": 0, "rate_limited_429": 0, "injected_500": 225}, {"t": 477, "total": 2748, "sent": 2084, "failed": 0, "rate_limited_429": 0, "injected_500": 237}, {"t": 501, "total": 2748, "sent": 2185, "failed": 0, "rate_limited_429": 0, "injected_500": 245}, {"t": 524, "total": 2748, "sent": 2264, "failed": 0, "rate_limited_429": 0, "injected_500": 256}, {"t": 548, "total": 2748, "sent": 2354, "failed": 0, "rate_limited_429": 0, "injected_500": 267}, {"t": 572, "total": 2748, "sent": 2468, "failed": 0, "rate_limited_429": 0, "injected_500": 277}, {"t": 595, "total": 2748, "sent": 2545, "failed": 0, "rate_limited_429": 0, "injected_500": 290}, {"t": 619, "total": 2748, "sent": 2633, "failed": 0, "rate_limited_429": 0, "injected_500": 294}, {"t": 643, "total": 2748, "sent": 2745, "failed": 0, "rate_limited_429": 0, "injected_500": 300}, {"t": 667, "total": 2748, "sent": 2748, "failed": 0, "rate_limited_429": 0, "injected_500": 300}]}};</script>
+<!-- EMBEDDED_DATA_END -->
+</head>
+<body>
+  <h1>Comparativa de resultados con y sin rate limiter</h1>
+  <p class="lead">
+    Mismo pipeline, mismo test de k6, cambiando solo el límite de peticiones al provider.
+    Los datos vienen de <code>no-rate-limit/summary.json</code> y
+    <code>with-rate-limit/summary.json</code>, generados por <a href="extract.py">extract.py</a>
+    a partir de <code>docker-compose logs</code>. Los logs completos de cada run están en su
+    carpeta correspondiente.
+  </p>
+
+  <div id="error"></div>
+  <div class="cards" id="cards"></div>
+
+  <div class="charts">
+    <div class="chart-box full"><canvas id="summaryChart"></canvas></div>
+    <div class="chart-box"><canvas id="drainChartA"></canvas></div>
+    <div class="chart-box"><canvas id="drainChartB"></canvas></div>
+  </div>
+
+  <footer id="footer"></footer>
+
+<script>
+async function loadRun(dir) {
+  if (window.__EMBEDDED_RESULTS__ && window.__EMBEDDED_RESULTS__[dir]) {
+    return window.__EMBEDDED_RESULTS__[dir];
+  }
+  const res = await fetch(`${dir}/summary.json`);
+  if (!res.ok) throw new Error(`no se pudo cargar ${dir}/summary.json (${res.status})`);
+  return res.json();
+}
+
+function renderCard(container, run, dir) {
+  const f = run.final;
+  const pct = (n) => ((100 * n) / run.total_notifications).toFixed(1) + '%';
+
+  const div = document.createElement('div');
+  div.className = 'card';
+
+  const h2 = document.createElement('h2');
+  h2.textContent = run.label;
+  div.appendChild(h2);
+
+  const table = document.createElement('table');
+  const rows = [
+    ['Notificaciones', String(run.total_notifications)],
+    ['Entregadas (sent)', `${f.sent} (${pct(f.sent)})`],
+    ['Fallidas (failed)', `${f.failed} (${pct(f.failed)})`],
+    ['429 del provider', String(f.rate_limited_429)],
+    ['500 inyectados', String(f.injected_500)],
+    ['Tiempo hasta drenar', `${run.drain_seconds}s`],
+  ];
+  for (const [label, value] of rows) {
+    const tr = document.createElement('tr');
+    const tdLabel = document.createElement('td');
+    tdLabel.textContent = label;
+    const tdValue = document.createElement('td');
+    tdValue.textContent = value;
+    tr.appendChild(tdLabel);
+    tr.appendChild(tdValue);
+    table.appendChild(tr);
+  }
+  div.appendChild(table);
+
+  const links = document.createElement('p');
+  links.style.margin = '0.5rem 0 0';
+  const makeLink = (href, text) => {
+    const a = document.createElement('a');
+    a.href = href;
+    a.textContent = text;
+    return a;
+  };
+  links.appendChild(makeLink(`${dir}/summary.json`, 'summary.json'));
+  links.appendChild(document.createTextNode(' · '));
+  links.appendChild(makeLink(`${dir}/provider.log`, 'provider.log'));
+  links.appendChild(document.createTextNode(' · '));
+  links.appendChild(makeLink(`${dir}/app.log`, 'app.log'));
+  div.appendChild(links);
+
+  container.appendChild(div);
+}
+
+function renderSummaryChart(runA, runB) {
+  new Chart(document.getElementById('summaryChart'), {
+    type: 'bar',
+    data: {
+      labels: ['sent', 'failed', '429', '500'],
+      datasets: [
+        {
+          label: runA.label,
+          backgroundColor: '#e07a5f',
+          data: [runA.final.sent, runA.final.failed, runA.final.rate_limited_429, runA.final.injected_500],
+        },
+        {
+          label: runB.label,
+          backgroundColor: '#3d9970',
+          data: [runB.final.sent, runB.final.failed, runB.final.rate_limited_429, runB.final.injected_500],
+        },
+      ],
+    },
+    options: { responsive: true, plugins: { title: { display: true, text: 'Resultado final por escenario' } } },
+  });
+}
+
+function renderDrainChart(canvasId, run, color) {
+  new Chart(document.getElementById(canvasId), {
+    type: 'line',
+    data: {
+      labels: run.samples.map((s) => s.t),
+      datasets: [
+        { label: 'sent', borderColor: color.sent, data: run.samples.map((s) => s.sent), tension: 0.2 },
+        { label: 'failed', borderColor: color.failed, data: run.samples.map((s) => s.failed), tension: 0.2 },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: { title: { display: true, text: `${run.label} (drenado en ${run.drain_seconds}s)` } },
+      scales: { x: { title: { display: true, text: 'segundos desde el fin del test k6' } } },
+    },
+  });
+}
+
+(async () => {
+  try {
+    const [runA, runB] = await Promise.all([loadRun('no-rate-limit'), loadRun('with-rate-limit')]);
+    const cards = document.getElementById('cards');
+    renderCard(cards, runA, 'no-rate-limit');
+    renderCard(cards, runB, 'with-rate-limit');
+    renderSummaryChart(runA, runB);
+    renderDrainChart('drainChartA', runA, { sent: '#3d9970', failed: '#e07a5f' });
+    renderDrainChart('drainChartB', runB, { sent: '#3d9970', failed: '#e07a5f' });
+    document.getElementById('footer').innerHTML =
+      `Generado con <a href="extract.py">extract.py</a> desde docker-compose logs. ` +
+      `Contexto y argumentación en <a href="../decisions.md">decisions.md</a>.`;
+  } catch (err) {
+    document.getElementById('error').textContent =
+      'Error cargando los datos: ' + err.message +
+      '\n\nSirve esta carpeta con un servidor local, p. ej.:\n  python -m http.server 8080\ny abre http://localhost:8080/dashboard.html (fetch() no funciona con file:// directo).';
+  }
+})();
+</script>
+</body>
+</html>

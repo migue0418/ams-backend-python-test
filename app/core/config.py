@@ -27,5 +27,9 @@ class Settings:
     retry_wait_initial_seconds: float = _float_env("RETRY_WAIT_INITIAL_SECONDS", 0.2)
     retry_wait_max_seconds: float = _float_env("RETRY_WAIT_MAX_SECONDS", 5.0)
 
+    # stay just under the provider's own 50-per-10s rule instead of finding out via 429s
+    rate_limit_max_requests: int = _int_env("RATE_LIMIT_MAX_REQUESTS", 45)
+    rate_limit_window_seconds: float = _float_env("RATE_LIMIT_WINDOW_SECONDS", 10.0)
+
 
 settings = Settings()

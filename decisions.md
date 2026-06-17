@@ -21,3 +21,11 @@ Para comprobar si esto mejoraba algo de verdad, y no solo lo parecía, hice dos 
 Sin rate limiter, solo el 53.2% de las notificaciones de un mismo test terminaba en `sent`; el resto (46.8%) acababa en `failed` tras agotar los reintentos, sobre todo porque el 84% de las llamadas al provider rebotaban con 429. Con el rate limiter activado, el mismo test terminó con el 100% de las notificaciones en `sent` y cero 429, a cambio de que el pipeline tardara más en drenar el backlog completo (de 4 minutos y medio a poco más de 11 minutos).
 
 El contrato de la API no exige un tiempo máximo para llegar a `sent` o `failed`, `queued` y `processing` son estados intermedios válidos, y el propio enunciado de la prueba pide valorar la robustez frente a errores por encima de la velocidad. Por eso creo que el cambio va en la dirección correcta: prefiero un sistema que tarde más pero no pierda notificaciones, a uno que "termine rápido" perdiendo casi la mitad por el camino.
+
+## Tests
+
+Para terminar, añadí una suite de pytest en `app/tests/`, con dos niveles distintos.
+
+Los unitarios aíslan una sola pieza: `test_repository.py` solo prueba el repositorio en memoria, `test_rate_limiter.py` solo el rate limiter, y `test_provider_client.py` solo el cliente del provider, mockeando la llamada HTTP real con `respx` para no depender de que el provider esté levantado.
+
+Los de integración dejan que varias piezas propias trabajen juntas de verdad, y solo mockean lo externo. `test_pipeline.py` comprueba que encolar un request acaba en `sent` o en `failed` según lo que responda el provider mockeado, pasando por la cola, los workers y el `provider_client` reales. `test_api.py` sube un paso más: usa `TestClient` contra la app de FastAPI completa, así que valida también la capa HTTP (create, process con su idempotencia, get, los 404 y el 422 de un tipo inválido).

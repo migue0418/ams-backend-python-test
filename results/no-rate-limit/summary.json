@@ -1,0 +1,109 @@
+{
+  "label": "Sin rate limiter",
+  "total_notifications": 2748,
+  "drain_seconds": 267,
+  "final": {
+    "sent": 1463,
+    "failed": 1285,
+    "rate_limited_429": 8550,
+    "injected_500": 143
+  },
+  "samples": [
+    {
+      "t": 4,
+      "total": 2748,
+      "sent": 320,
+      "failed": 241,
+      "rate_limited_429": 1833,
+      "injected_500": 34
+    },
+    {
+      "t": 28,
+      "total": 2748,
+      "sent": 451,
+      "failed": 348,
+      "rate_limited_429": 2469,
+      "injected_500": 49
+    },
+    {
+      "t": 52,
+      "total": 2748,
+      "sent": 543,
+      "failed": 438,
+      "rate_limited_429": 3125,
+      "injected_500": 57
+    },
+    {
+      "t": 76,
+      "total": 2748,
+      "sent": 662,
+      "failed": 540,
+      "rate_limited_429": 3789,
+      "injected_500": 66
+    },
+    {
+      "t": 100,
+      "total": 2748,
+      "sent": 771,
+      "failed": 645,
+      "rate_limited_429": 4445,
+      "injected_500": 79
+    },
+    {
+      "t": 124,
+      "total": 2748,
+      "sent": 865,
+      "failed": 734,
+      "rate_limited_429": 5100,
+      "injected_500": 87
+    },
+    {
+      "t": 148,
+      "total": 2748,
+      "sent": 1000,
+      "failed": 849,
+      "rate_limited_429": 5746,
+      "injected_500": 100
+    },
+    {
+      "t": 172,
+      "total": 2748,
+      "sent": 1092,
+      "failed": 939,
+      "rate_limited_429": 6386,
+      "injected_500": 108
+    },
+    {
+      "t": 196,
+      "total": 2748,
+      "sent": 1190,
+      "failed": 1034,
+      "rate_limited_429": 7040,
+      "injected_500": 117
+    },
+    {
+      "t": 219,
+      "total": 2748,
+      "sent": 1323,
+      "failed": 1136,
+      "rate_limited_429": 7679,
+      "injected_500": 126
+    },
+    {
+      "t": 243,
+      "total": 2748,
+      "sent": 1412,
+      "failed": 1227,
+      "rate_limited_429": 8322,
+      "injected_500": 138
+    },
+    {
+      "t": 267,
+      "total": 2748,
+      "sent": 1463,
+      "failed": 1285,
+      "rate_limited_429": 8550,
+      "injected_500": 143
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+# Decisiones tomadas y argumentación
+
+## Primera aproximación: Background tasks + retries
+
+En una primera aproximación al problema, y con el objetivo de superar los tests de k6, pensé que la mejor opción era resolver el procesamiento en segundo plano: encolar la notificación y devolver la respuesta de inmediato, dejando que un pool de workers se encargara de hablar con el provider (con sus retries correspondientes) sin bloquear al cliente.
+
+Esto tiene una pega, y es que aunque los tests no fallen, en parte es porque estamos "engañando" a k6. El endpoint responde 202 en el instante en que encola la notificación, sin esperar a que la entrega al provider termine de verdad. Eso es lo que permite que la API absorba 200 VUs (k6 simulando 200 clientes concurrentes ejecutando el flujo create/process/get en bucle) sin bloquearse esperando al provider. Pero como consecuencia, el código de estado HTTP que valida k6 no dice nada sobre si la notificación llegó a su destino: solo confirma que el contrato de la API se cumplió.
+
+Si miramos los logs de docker del provider y de la app, vemos que muchos de esos intentos acaban perdiéndose por el camino sin llegar a completarse. Por eso hacía falta dar un paso más.
+
+## Mejora de los resultados: Rate limiting
+
+Mirando los logs con más detalle, vi que el problema no era solo de concurrencia. El provider no solo limita cuántas peticiones puede tener en vuelo a la vez (50 in-flight), también limita cuántas acepta en una ventana de 10 segundos (otras 50). El pool de workers estaba dimensionado para respetar lo primero, pero no lo segundo: aunque nunca llegáramos a tener 50 peticiones simultáneas, sí que superábamos de sobra esas 50 cada 10 segundos, y el provider terminaba devolviendo 429 en la mayoría de los intentos.
+
+La solución que elegí fue añadir un rate limiter del lado del cliente (`app/services/rate_limiter.py`) que reproduce el mismo algoritmo de ventana móvil que usa el provider internamente, lo vi mirando su propio código en `provider/app.py`. Antes de cada llamada, incluidas las de retry, se comprueba si hay hueco dentro de los últimos `RATE_LIMIT_WINDOW_SECONDS` (10 segundos) sin superar `RATE_LIMIT_MAX_REQUESTS` (45, con margen de seguridad sobre el límite real de 50) antes de disparar la petición; si no hay hueco, se espera. Así dejamos de gastar reintentos en peticiones que ya sabíamos de antemano que iban a rebotar. El retry con backoff exponencial y jitter se mantiene además como defensa adicional contra el ~10% de errores 500 aleatorios que el provider inyecta independientemente del rate limit.
+
+Para comprobar si esto mejoraba algo de verdad, y no solo lo parecía, hice dos mediciones limpias del mismo test de carga: contenedores reiniciados desde cero (`docker-compose down` y `up` de nuevo), un único run de `docker-compose run --rm load-test`, y luego esperar a que el pipeline terminara de procesar todo el backlog, no solo a que acabara el test de k6, que dura 40 segundos pero deja trabajo pendiente en background varios minutos más. Para el run "sin rate limiter" usé el mismo código, subiendo temporalmente `RATE_LIMIT_MAX_REQUESTS` a un valor que nunca se alcanza, así no hizo falta otra rama ni tocar el Dockerfile. Todo esto está automatizado en `results/extract.py`, que hace polling sobre `docker-compose logs` hasta que las notificaciones procesadas (`sent` + `failed`) igualan el total creado, y vuelca tanto un `summary.json` con la serie temporal como los logs completos de `provider` y `app` de ese run. Los resultados de ambas corridas, junto con un dashboard que los lee directamente de esos archivos sin ningún número escrito a mano, están en `results/` (`results/dashboard.html` para verlos, `results/no-rate-limit/` y `results/with-rate-limit/` con el JSON y los logs crudos de cada uno).
+
+## Resultados finales
+
+Sin rate limiter, solo el 53.2% de las notificaciones de un mismo test terminaba en `sent`; el resto (46.8%) acababa en `failed` tras agotar los reintentos, sobre todo porque el 84% de las llamadas al provider rebotaban con 429. Con el rate limiter activado, el mismo test terminó con el 100% de las notificaciones en `sent` y cero 429, a cambio de que el pipeline tardara más en drenar el backlog completo (de 4 minutos y medio a poco más de 11 minutos).
+
+El contrato de la API no exige un tiempo máximo para llegar a `sent` o `failed`, `queued` y `processing` son estados intermedios válidos, y el propio enunciado de la prueba pide valorar la robustez frente a errores por encima de la velocidad. Por eso creo que el cambio va en la dirección correcta: prefiero un sistema que tarde más pero no pierda notificaciones, a uno que "termine rápido" perdiendo casi la mitad por el camino.
+
+## Tests
+
+Para terminar, añadí una suite de pytest en `app/tests/`, con dos niveles distintos.
+
+Los unitarios aíslan una sola pieza: `test_repository.py` solo prueba el repositorio en memoria, `test_rate_limiter.py` solo el rate limiter, y `test_provider_client.py` solo el cliente del provider, mockeando la llamada HTTP real con `respx` para no depender de que el provider esté levantado.
+
+Los de integración dejan que varias piezas propias trabajen juntas de verdad, y solo mockean lo externo. `test_pipeline.py` comprueba que encolar un request acaba en `sent` o en `failed` según lo que responda el provider mockeado, pasando por la cola, los workers y el `provider_client` reales. `test_api.py` sube un paso más: usa `TestClient` contra la app de FastAPI completa, así que valida también la capa HTTP (create, process con su idempotencia, get, los 404 y el 422 de un tipo inválido).

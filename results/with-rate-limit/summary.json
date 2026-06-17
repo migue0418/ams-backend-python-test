@@ -1,0 +1,245 @@
+{
+  "label": "Con rate limiter (45 req/10s)",
+  "total_notifications": 2748,
+  "drain_seconds": 667,
+  "final": {
+    "sent": 2748,
+    "failed": 0,
+    "rate_limited_429": 0,
+    "injected_500": 300
+  },
+  "samples": [
+    {
+      "t": 4,
+      "total": 2748,
+      "sent": 238,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 32
+    },
+    {
+      "t": 27,
+      "total": 2748,
+      "sent": 321,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 39
+    },
+    {
+      "t": 51,
+      "total": 2748,
+      "sent": 402,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 52
+    },
+    {
+      "t": 74,
+      "total": 2748,
+      "sent": 496,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 75
+    },
+    {
+      "t": 98,
+      "total": 2748,
+      "sent": 583,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 92
+    },
+    {
+      "t": 122,
+      "total": 2748,
+      "sent": 666,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 99
+    },
+    {
+      "t": 146,
+      "total": 2748,
+      "sent": 752,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 119
+    },
+    {
+      "t": 169,
+      "total": 2748,
+      "sent": 862,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 128
+    },
+    {
+      "t": 193,
+      "total": 2748,
+      "sent": 943,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 137
+    },
+    {
+      "t": 217,
+      "total": 2748,
+      "sent": 1029,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 147
+    },
+    {
+      "t": 240,
+      "total": 2748,
+      "sent": 1143,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 158
+    },
+    {
+      "t": 264,
+      "total": 2748,
+      "sent": 1228,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 167
+    },
+    {
+      "t": 288,
+      "total": 2748,
+      "sent": 1310,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 175
+    },
+    {
+      "t": 311,
+      "total": 2748,
+      "sent": 1415,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 181
+    },
+    {
+      "t": 335,
+      "total": 2748,
+      "sent": 1521,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 189
+    },
+    {
+      "t": 359,
+      "total": 2748,
+      "sent": 1607,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 193
+    },
+    {
+      "t": 382,
+      "total": 2748,
+      "sent": 1699,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 198
+    },
+    {
+      "t": 406,
+      "total": 2748,
+      "sent": 1821,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 204
+    },
+    {
+      "t": 430,
+      "total": 2748,
+      "sent": 1897,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 218
+    },
+    {
+      "t": 453,
+      "total": 2748,
+      "sent": 1981,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 225
+    },
+    {
+      "t": 477,
+      "total": 2748,
+      "sent": 2084,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 237
+    },
+    {
+      "t": 501,
+      "total": 2748,
+      "sent": 2185,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 245
+    },
+    {
+      "t": 524,
+      "total": 2748,
+      "sent": 2264,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 256
+    },
+    {
+      "t": 548,
+      "total": 2748,
+      "sent": 2354,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 267
+    },
+    {
+      "t": 572,
+      "total": 2748,
+      "sent": 2468,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 277
+    },
+    {
+      "t": 595,
+      "total": 2748,
+      "sent": 2545,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 290
+    },
+    {
+      "t": 619,
+      "total": 2748,
+      "sent": 2633,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 294
+    },
+    {
+      "t": 643,
+      "total": 2748,
+      "sent": 2745,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 300
+    },
+    {
+      "t": 667,
+      "total": 2748,
+      "sent": 2748,
+      "failed": 0,
+      "rate_limited_429": 0,
+      "injected_500": 300
+    }
+  ]
+}

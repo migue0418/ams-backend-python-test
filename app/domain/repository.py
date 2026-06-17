@@ -5,6 +5,8 @@ from domain.models import NotificationRecord, NotificationRequestIn, RequestStat
 
 
 class InMemoryNotificationRepository:
+    # no locks needed because nothing awaits between reading and writing status, so each transition is atomic
+
     def __init__(self) -> None:
         self._records: dict[str, NotificationRecord] = {}
 
@@ -25,6 +27,12 @@ class InMemoryNotificationRepository:
         record = self._records[request_id]
         record.status = RequestStatus.processing
         return record
+
+    def mark_sent(self, request_id: str) -> None:
+        self._records[request_id].status = RequestStatus.sent
+
+    def mark_failed(self, request_id: str) -> None:
+        self._records[request_id].status = RequestStatus.failed
 
 
 _repository = InMemoryNotificationRepository()

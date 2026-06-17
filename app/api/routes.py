@@ -6,6 +6,7 @@ from domain.models import (
 )
 from domain.repository import InMemoryNotificationRepository, get_repository
 from fastapi import APIRouter, Depends, HTTPException, Response, status
+from services import pipeline
 
 router = APIRouter(prefix="/requests", tags=["Notifications"])
 
@@ -36,8 +37,10 @@ def process_request(
             detail="Request not found",
         )
 
+    # only the first call enqueues, a repeat call just returns the current status
     if record.status == RequestStatus.queued:
         record = repository.start_processing(request_id)
+        pipeline.enqueue(request_id)
         response.status_code = status.HTTP_202_ACCEPTED
 
     return NotificationStatusOut(id=record.id, status=record.status)
